@@ -8,12 +8,13 @@ import { Switch } from "@/components/ui/switch"
 import {Button} from "@/components/ui/button.tsx";
 import {useEffect} from "react";
 import {createProduct, getProduct, updateProduct} from "@/services/api.products.ts";
-import {useParams} from "react-router";
+import {useNavigate, useParams} from "react-router";
 import { toast } from "sonner";
 
 const ProductPage = () => {
     const { productId } = useParams();
     const isEdit = Boolean(productId);
+    const navigate = useNavigate();
 
     const {
         register,
@@ -33,7 +34,7 @@ const ProductPage = () => {
             sort: 0,
             is_active: false,
             is_favorite: false,
-            category_id: 1,
+            category_id: 1, // Default category ID
         }
     });
 
@@ -68,6 +69,7 @@ const ProductPage = () => {
                 await createProduct(data);
                 toast.success("Product created successfully");
             }
+            navigate("/products");
         } catch (error) {
             // console.log("Error creating product: ", error);
             toast.error(
@@ -161,7 +163,6 @@ const ProductPage = () => {
                         </div>
                     )}
                 </div>
-
                 <Button disabled={isSubmitting} className="w-full">
                     {isSubmitting ? "Submitting..." : "Submit"}
                 </Button>
